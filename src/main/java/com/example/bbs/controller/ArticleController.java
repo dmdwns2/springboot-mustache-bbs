@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -35,17 +36,30 @@ public class ArticleController {
 
         if(!optionalArticle.isEmpty()){
             model.addAttribute("article", optionalArticle.get());
-            return "show";
+            return "articles/show";
         } else {
-            return "error";
+            return "articles/error";
         }
     }
-    @PostMapping("/post")
-    public String articles(ArticleDto articleDto) {
-        log.info(articleDto.toString());
-        articleRepository.save(articleDto.toEntity());
-        return "";
+
+//    @GetMapping("/list")
+//    public String list(){
+//        return "articles/list";
+//    }
+
+    @GetMapping("/list")
+    public String list(Model model) {
+        List<Article> articles = articleRepository.findAll();
+        model.addAttribute("articles", articles);
+        return "articles/list";
+
     }
+
+    @GetMapping("")
+    public String index(){
+        return "redirect:/articles/list";
+    }
+
 
     @PostMapping("")
     public String add(ArticleDto articleDto) {
