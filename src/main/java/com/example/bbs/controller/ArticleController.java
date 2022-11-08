@@ -16,16 +16,19 @@ public class ArticleController {
 
     private final ArticleRepository articleRepository;
 
-    public ArticleController(ArticleRepository articleRepository) {
-        this.articleRepository = articleRepository;
+    public ArticleController(ArticleRepository repository) {
+        this.articleRepository = repository;
     }
 
-    @PostMapping(value = "/posts")
-    public String createArticle(ArticleDto form) {
-        log.info(form.toString());
-        Article article = form.toEntity();
-        articleRepository.save(article);
+    @GetMapping("/new")
+    public String createArticle(){
+        return "articles/new";
+    }
+
+    @PostMapping("/post")
+    public String articles(ArticleDto articleDto) {
+        log.info(articleDto.toString());
+        articleRepository.save(articleDto.toEntity());
         return "";
     }
 }
-
