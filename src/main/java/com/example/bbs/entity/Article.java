@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Article2")
+@Table(name = "article2")
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Article {
@@ -17,10 +18,6 @@ public class Article {
     private Long id;
     private String title;
     private String content;
-
-    public Long getId() {
-        return id;
-    }
 
     public Article(String title, String content) {
         this.title = title;

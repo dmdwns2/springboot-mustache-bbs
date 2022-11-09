@@ -71,17 +71,13 @@ public class ArticleController {
         }
     }
 
-    @PutMapping("/{id}/update")
-    public String update(@PathVariable Long id, ArticleDto articleDto,Model model){
+    @PostMapping("/{id}/update")
+    public String update(@PathVariable Long id, ArticleDto articleDto, Model model) {
         log.info("title:{} content:{}", articleDto.getTitle(), articleDto.getContent());
         Article article = articleRepository.save(articleDto.toEntity());
-        model.addAttribute("article",article);
-        return "redirect:/articles/show";
+        model.addAttribute("article", article);
+        return String.format("redirect:/articles/%d", article.getId());
     }
-//    @DeleteMapping("/delete")
-//    public String delete(Model model){
-//        model
-//    }
 
     @PostMapping("")
     public String add(ArticleDto articleDto) {
