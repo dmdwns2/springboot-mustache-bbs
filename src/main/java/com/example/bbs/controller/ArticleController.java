@@ -6,10 +6,7 @@ import com.example.bbs.entity.Article;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,15 +23,15 @@ public class ArticleController {
     }
 
     @GetMapping("/new")
-    public String createArticle(){
+    public String createArticle() {
         return "articles/new";
     }
 
     @GetMapping("/{id}")
-    public String selectSingle(@PathVariable Long id, Model model){
+    public String selectSingle(@PathVariable Long id, Model model) {
         Optional<Article> optionalArticle = articleRepository.findById(id);
 
-        if(!optionalArticle.isEmpty()){
+        if (!optionalArticle.isEmpty()) {
             model.addAttribute("article", optionalArticle.get());
             return "articles/show";
         } else {
@@ -56,10 +53,35 @@ public class ArticleController {
     }
 
     @GetMapping("")
-    public String index(){
+    public String index() {
         return "redirect:/articles/list";
     }
 
+    @GetMapping("/{id}/edit")
+    public String edit(@PathVariable Long id, Model model) {
+        Optional<Article> optionalArticle =
+                articleRepository.findById(id);
+        if (!optionalArticle.isEmpty()) {
+            model.addAttribute("article",
+                    optionalArticle.get());
+            return "/articles/edit";
+        } else {
+            model.addAttribute("message", String.format("%d가 없습니다.", id));
+            return "/articles/error";
+        }
+    }
+
+    @PutMapping("/{id}/update")
+    public String update(@PathVariable Long id, ArticleDto articleDto,Model model){
+        log.info("title:{} content:{}", articleDto.getTitle(), articleDto.getContent());
+        Article article = articleRepository.save(articleDto.toEntity());
+        model.addAttribute("article",article);
+        return "redirect:/articles/show";
+    }
+//    @DeleteMapping("/delete")
+//    public String delete(Model model){
+//        model
+//    }
 
     @PostMapping("")
     public String add(ArticleDto articleDto) {
