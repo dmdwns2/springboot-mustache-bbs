@@ -49,7 +49,6 @@ public class ArticleController {
         List<Article> articles = articleRepository.findAll();
         model.addAttribute("articles", articles);
         return "articles/list";
-
     }
 
     @GetMapping("")
@@ -77,6 +76,14 @@ public class ArticleController {
         Article article = articleRepository.save(articleDto.toEntity());
         model.addAttribute("article", article);
         return String.format("redirect:/articles/%d", article.getId());
+    }
+
+
+    @GetMapping("/{id}/delete")
+    public String delete(@PathVariable Long id, Model model){
+        articleRepository.deleteById(id);
+        model.addAttribute("massage", String.format("해당 글은 삭제됐습니다.", id));
+        return "redirect:/articles";
     }
 
     @PostMapping("")
